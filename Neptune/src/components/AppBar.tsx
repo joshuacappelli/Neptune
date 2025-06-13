@@ -1,5 +1,5 @@
 import { AppBar as MuiAppBar, Toolbar, IconButton, Menu, MenuItem, Typography, Box } from '@mui/material';
-import { Add as AddIcon, Close as CloseIcon, Code as CodeIcon, CloudDownload as CloneIcon, AccountCircle as AccountIcon, Help as HelpIcon } from '@mui/icons-material';
+import { Add as AddIcon, Close as CloseIcon, Code as CodeIcon, CloudDownload as CloneIcon, AccountCircle as AccountIcon } from '@mui/icons-material';
 import { useState } from 'react';
 
 interface AppBarProps {
