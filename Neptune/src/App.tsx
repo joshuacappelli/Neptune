@@ -2,6 +2,8 @@ import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
 import StartPage from "./pages/StartPage";
+import SettingConfig from "./pages/SettingConfig";
+import { Home } from "./pages/Home";
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 
 
@@ -19,6 +21,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<StartPage />} />
+        <Route path="/setting" element={<SettingConfig />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,9 @@
 import { FolderOpen, LogIn, Github, Code, Users, GitBranch } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function StartPage() {
+
+    const navigate = useNavigate();
 
     return (
         <div className="h-screen w-screen bg-black overflow-hidden fixed inset-0 flex items-center justify-center">
@@ -74,7 +77,7 @@ export default function StartPage() {
           {/* Action Buttons - Stacked */}
           <div className="space-y-3 mb-8">
             {/* Open Repository Button */}
-            <button className="group relative w-full overflow-hidden rounded-2xl">
+            <button className="group relative w-full overflow-hidden rounded-2xl" onClick={() => navigate("/setting")}>
                 <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-blue-800  rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
                 <div className="relative flex items-center justify-center space-x-3 bg-gradient-to-r from-green-400/90 to-green-900/90 backdrop-blur-xl border border-white/20 text-white px-8 py-5 rounded-2xl font-semibold transition-all duration-300  group-hover:shadow-2xl group:hover group-hover:shadow-blue-500/25">
                   <FolderOpen className="w-6 h-6 transition-transform" />
@@ -83,7 +86,8 @@ export default function StartPage() {
                 {/* Shimmer effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
                                 translate-x-[-100%] group-hover:translate-x-[100%] 
-                                transition-transform duration-1000 ease-out rounded-2xl" />
+                                transition-transform duration-1000 ease-out rounded-2xl"
+                                />
               </button>
             
             {/* Sign In Button */}
