@@ -1,59 +1,76 @@
-import { Bell, Plus, Search, User } from "lucide-react"
-import { Button } from "./ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu"
+import { useState } from "react"
+import { Sidebar } from "./SideBar"
+import { RepositoryGrid } from "./Repository-Grid"
+import { AddRepositoryModal } from "./AddRepoModal"
+import { DashboardHeader } from "./DashboardHeader"
+import type { Repository } from "../types/Repository"
 
-interface DashboardHeaderProps {
-  onAddRepository: () => void
-}
+export function Dashboard() {
+  const [isAddRepoModalOpen, setIsAddRepoModalOpen] = useState(false)
+  const [repositories, setRepositories] = useState<Repository[]>([
+    {
+      id: "1",
+      name: "neptune-core",
+      owner: "neptune",
+      description: "Core functionality for Neptune platform",
+      stars: 128,
+      forks: 32,
+      issues: 8,
+      pullRequests: 5,
+      lastUpdated: "2023-06-10T10:23:00Z",
+      language: "TypeScript",
+      visibility: "private",
+      status: "healthy",
+    },
+    {
+      id: "2",
+      name: "neptune-ui",
+      owner: "neptune",
+      description: "UI components for Neptune applications",
+      stars: 256,
+      forks: 48,
+      issues: 12,
+      pullRequests: 7,
+      lastUpdated: "2023-06-08T14:45:00Z",
+      language: "TypeScript",
+      visibility: "public",
+      status: "warning",
+    },
+    {
+      id: "3",
+      name: "neptune-docs",
+      owner: "neptune",
+      description: "Documentation for Neptune platform",
+      stars: 64,
+      forks: 16,
+      issues: 3,
+      pullRequests: 2,
+      lastUpdated: "2023-06-05T09:15:00Z",
+      language: "MDX",
+      visibility: "public",
+      status: "healthy",
+    },
+  ])
 
-export function DashboardHeader({ onAddRepository }: DashboardHeaderProps) {
+  const addRepository = (repository: Repository) => {
+    setRepositories([...repositories, repository])
+    setIsAddRepoModalOpen(false)
+  }
+
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm px-6">
-      <div className="flex flex-1 items-center gap-4">
-        <h1 className="text-xl font-semibold text-white">Operations Hub</h1>
-        <div className="relative ml-6 hidden md:block">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
-          <input 
-            type="search" 
-            placeholder="Search repositories..." 
-            className="w-96 bg-gray-800/50 text-white placeholder-gray-400 pl-8 rounded-md border border-gray-700 focus:border-gray-600 focus:outline-none" 
-          />
+    <div className="flex h-screen bg-background text-foreground">
+      <Sidebar />
+      <main className="flex-1 overflow-auto">
+        <DashboardHeader onAddRepository={() => setIsAddRepoModalOpen(true)} />
+        <div className="container mx-auto px-6 py-8">
+          <RepositoryGrid repositories={repositories} />
         </div>
-      </div>
-      <div className="flex items-center gap-4">
-        <Button onClick={onAddRepository} className="bg-blue-600 hover:bg-blue-700 text-white">
-          <Plus className="mr-2 h-4 w-4" />
-          Add Repository
-        </Button>
-        <Button variant="ghost" size="icon" className="rounded-full text-white hover:bg-gray-800">
-          <Bell className="h-5 w-5" />
-          <span className="sr-only">Notifications</span>
-        </Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full text-white hover:bg-gray-800">
-              <User className="h-5 w-5" />
-              <span className="sr-only">User menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-gray-800 border-gray-700">
-            <DropdownMenuLabel className="text-white">My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator className="bg-gray-700" />
-            <DropdownMenuItem className="text-white hover:bg-gray-700">Profile</DropdownMenuItem>
-            <DropdownMenuItem className="text-white hover:bg-gray-700">Settings</DropdownMenuItem>
-            <DropdownMenuItem className="text-white hover:bg-gray-700">Team</DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-gray-700" />
-            <DropdownMenuItem className="text-white hover:bg-gray-700">Log out</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </header>
+        <AddRepositoryModal
+          isOpen={isAddRepoModalOpen}
+          onClose={() => setIsAddRepoModalOpen(false)}
+          onAdd={addRepository}
+        />
+      </main>
+    </div>
   )
 }

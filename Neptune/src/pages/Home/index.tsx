@@ -1,20 +1,15 @@
-import { AppBar } from '../../components/AppBar';
-import { DashboardHeader } from '../../components/Dashboard';
+import { DashboardHeader } from '../../components/DashboardHeader';
+import { Dashboard } from '../../components/Dashboard';
 import { Sidebar } from '../../components/SideBar';
 
 export const Home = () => {
-    const handleNewTab = () => {};
-    const handleCloseTab = () => {};
-    const handleInitRepo = () => {};
-    const handleCloneRepo = () => {};
-    const handleSignIn = () => {};
+
     const handleAddRepository = () => {};
     return (
         <div className="h-screen w-screen bg-black overflow-hidden fixed inset-0">
             <div className="flex h-full">
-                <Sidebar />
                 <div className="flex-1 flex flex-col">
-                    <DashboardHeader onAddRepository={handleAddRepository} />
+                    <Dashboard />
                     <div className="flex-1 relative">
                         <div className="absolute inset-0"></div>
                         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800"></div>

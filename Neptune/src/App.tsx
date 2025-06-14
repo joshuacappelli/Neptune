@@ -6,8 +6,6 @@ import SettingConfig from "./pages/SettingConfig";
 import { Home } from "./pages/Home";
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 
-
-
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
   const [name, setName] = useState("");
