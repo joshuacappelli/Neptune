@@ -21,6 +21,7 @@ function App() {
         <Route path="/" element={<StartPage />} />
         <Route path="/setting" element={<SettingConfig />} />
         <Route path="/home" element={<Home />} />
+        
       </Routes>
     </BrowserRouter>
   );

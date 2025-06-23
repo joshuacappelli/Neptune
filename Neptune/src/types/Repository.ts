@@ -12,3 +12,11 @@ export interface Repository {
     visibility: "public" | "private"
     status: "healthy" | "warning" | "error"
   }
+
+  export interface Commit {
+    id: string
+    message: string
+    author: string
+    timestamp: number
+    parents: string[]
+  }

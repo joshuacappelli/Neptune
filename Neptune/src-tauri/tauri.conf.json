@@ -39,5 +39,6 @@
     "fs": {
       "requireLiteralLeadingDot": true
     }
+    
   }
 }

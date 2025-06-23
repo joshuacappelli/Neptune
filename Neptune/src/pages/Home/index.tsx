@@ -1,6 +1,4 @@
-import { DashboardHeader } from '../../components/DashboardHeader';
 import { Dashboard } from '../../components/Dashboard';
-import { Sidebar } from '../../components/SideBar';
 
 export const Home = () => {
 

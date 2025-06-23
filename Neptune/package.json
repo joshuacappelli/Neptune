@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@fabianlars/tauri-plugin-oauth": "^2.0.0",
     "@mui/icons-material": "^7.1.1",
     "@mui/material": "^7.1.1",
     "@radix-ui/react-dialog": "^1.1.14",
@@ -23,14 +24,21 @@
     "@tauri-apps/api": "^2.5.0",
     "@tauri-apps/plugin-fs": "^2.3.0",
     "@tauri-apps/plugin-opener": "^2",
+    "@tauri-apps/plugin-store": "^2.2.1",
+    "@tauri-apps/plugin-shell": "^2.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "immer": "^10.1.1",
     "lucide-react": "^0.514.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.6.2",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+    "tauri-plugin-keychain": "^2.0.1",
+    "tauri-plugin-keyring-api": "^0.1.1",
+    "zustand": "^5.0.5",
+    "zustand-persist": "^0.4.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",

@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
+import { useNavigate } from "react-router-dom"
 import type { Repository } from "../types/Repository"
 import { formatDistanceToNow } from "date-fns"
 import { Code, GitBranch, GitFork, MoreHorizontal, Star, AlertCircle, CheckCircle2, Lock, Globe } from "lucide-react"
@@ -18,7 +19,8 @@ interface RepositoryCardProps {
 
 export function RepositoryCard({ repository }: RepositoryCardProps) {
   const lastUpdated = formatDistanceToNow(new Date(repository.lastUpdated), { addSuffix: true })
-
+  const navigate = useNavigate()
+  
   return (
     <Card className="repo-card overflow-hidden border border-white/10 bg-gray-900/30 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:border-blue-500/30">
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
@@ -53,6 +55,9 @@ export function RepositoryCard({ repository }: RepositoryCardProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="bg-gray-900/95 backdrop-blur-md border-gray-800">
+              <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-gray-800/50">
+              <button onClick={() => navigate("/setting")}>Setting</button>
+              </DropdownMenuItem>
               <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-gray-800/50">View Repository</DropdownMenuItem>
               <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-gray-800/50">Clone Repository</DropdownMenuItem>
               <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-gray-800/50">View Issues</DropdownMenuItem>

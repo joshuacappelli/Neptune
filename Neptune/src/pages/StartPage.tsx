@@ -80,31 +80,19 @@ export default function StartPage() {
             <button className="group relative w-full overflow-hidden rounded-2xl" onClick={() => navigate("/setting")}>
                 <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-blue-800  rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
                 <div className="relative flex items-center justify-center space-x-3 bg-gradient-to-r from-green-400/90 to-green-900/90 backdrop-blur-xl border border-white/20 text-white px-8 py-5 rounded-2xl font-semibold transition-all duration-300  group-hover:shadow-2xl group:hover group-hover:shadow-blue-500/25">
-                  <FolderOpen className="w-6 h-6 transition-transform" />
-                  <span className="text-lg">Open Repository</span>
+                  <Github className="w-6 h-6 transition-transform" />
+                  <span className="text-lg">Sign In</span>
                 </div>
                 {/* Shimmer effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
                                 translate-x-[-100%] group-hover:translate-x-[100%] 
                                 transition-transform duration-1000 ease-out rounded-2xl"
                                 />
-              </button>
-            
-            {/* Sign In Button */}
-            <button className="group relative w-full overflow-hidden rounded-2xl">
-                <div className="absolute inset-0 bg-white/5 rounded-2xl blur opacity-50 group-hover:opacity-75 transition-opacity"></div>
-                <div className="relative flex items-center justify-center space-x-3 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border border-white/20 hover:from-white/15 hover:via-white/10 hover:to-white/5 text-white px-8 py-5 rounded-2xl font-semibold transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-white/10">
-                  <LogIn className="w-6 h-6 transition-transform" />
-                  <span className="text-lg">Sign In</span>
-                </div>
-                {/* Shimmer effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent 
-                                translate-x-[-100%] group-hover:translate-x-[100%] 
-                                transition-transform duration-1000 ease-out rounded-2xl" />
-                {/* Bottom highlight */}
                 <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r 
                                 from-transparent via-white/40 to-transparent rounded-b-2xl" />
               </button>
+            
+            
           </div>
         </div>
     
