@@ -108,6 +108,17 @@
       ]
     },
     {
+      "identifier": "core:event:allow-listen",
+      "allow": [
+        {
+          "path": "*"
+        }
+      ]
+    },
+    {
+      "identifier": "shell:allow-open"
+    },
+    {
       "identifier": "core:path:default",
       "allow": [
         {
@@ -127,6 +138,7 @@
         }
       ]
     },
-    "store:default"
+    "store:default",
+    "stronghold:default"
   ]
 }

@@ -14,6 +14,8 @@ import {
   ChevronRight,
 } from "lucide-react"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { logout } from "../oauth"
 
 interface SidebarItemProps {
   icon: React.ReactNode
@@ -41,6 +43,16 @@ function SidebarItem({ icon, label, active, href, collapsed }: SidebarItemProps)
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <div 
@@ -79,13 +91,16 @@ export function Sidebar() {
           </nav>
         </div>
         <div className="mt-auto border-t border-gray-800 p-4 shrink-0">
-          <div className={cn(
-            "flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white cursor-pointer",
-            collapsed && "justify-center"
-          )}>
+          <button
+            onClick={handleLogout}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white cursor-pointer w-full",
+              collapsed && "justify-center"
+            )}
+          >
             <LogOut className="h-4 w-4 shrink-0" />
             {!collapsed && <span className="truncate">Log out</span>}
-          </div>
+          </button>
         </div>
       </div>
     </div>
