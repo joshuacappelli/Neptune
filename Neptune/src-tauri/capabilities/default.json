@@ -139,6 +139,6 @@
       ]
     },
     "store:default",
-    "stronghold:default"
+    "keychain:default"
   ]
 }
