@@ -1,4 +1,4 @@
-use tauri::{Window,Emitter, Manager};
+use tauri::{Window,Emitter};
 use reqwest::Client;
 use tauri_plugin_oauth::{OauthConfig, start_with_config};
 use url::Url;
