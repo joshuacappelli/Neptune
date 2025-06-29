@@ -18,11 +18,11 @@ alter table public.users enable row level security;
 
 create policy "users: Self-select"
   on public.users for select
-  using ( auth.uid() = id );
+  using ( id = (select auth.uid()) );
 
 create policy "users: Self-update"
   on public.users for update
-  using ( auth.uid() = id );
+  using ( id = (select auth.uid()) );
 
 -------------------------------------------------------------------------------
 -- 2. REPOSITORIES the user opted into
@@ -42,19 +42,19 @@ alter table public.repos enable row level security;
 
 create policy "repos: owner select"
   on public.repos for select
-  using ( auth.uid() = user_id );
+  using ( user_id = (select auth.uid()) );
 
 create policy "repos: owner insert"
   on public.repos for insert
-  with check ( auth.uid() = user_id );
+  with check ( user_id = (select auth.uid()) );
 
 create policy "repos: owner update"
   on public.repos for update
-  using ( auth.uid() = user_id );
+  using ( user_id = (select auth.uid()) );
 
 create policy "repos: owner delete"
   on public.repos for delete
-  using ( auth.uid() = user_id );
+  using ( user_id = (select auth.uid()) );
 
 -------------------------------------------------------------------------------
 -- 2b. REPO CONNECTIONS  (new)
@@ -75,19 +75,28 @@ alter table public.repo_connections enable row level security;
 create policy "conn: owner select"
   on public.repo_connections for select
   using (
-    auth.uid() = (select user_id from public.repos where id = repo_id)
+    repo_id in (
+      select id from public.repos 
+      where user_id = (select auth.uid())
+    )
   );
 
 create policy "conn: owner insert"
   on public.repo_connections for insert
   with check (
-    auth.uid() = (select user_id from public.repos where id = repo_id)
+    repo_id in (
+      select id from public.repos 
+      where user_id = (select auth.uid())
+    )
   );
 
 create policy "conn: owner delete"
   on public.repo_connections for delete
   using (
-    auth.uid() = (select user_id from public.repos where id = repo_id)
+    repo_id in (
+      select id from public.repos 
+      where user_id = (select auth.uid())
+    )
   );
 
 -------------------------------------------------------------------------------
@@ -106,7 +115,7 @@ alter table public.token_usage enable row level security;
 
 create policy "usage: owner select"
   on public.token_usage for select
-  using ( auth.uid() = user_id );
+  using ( user_id = (select auth.uid()) );
 
 -- (service-role key bypasses RLS for inserts)
 
@@ -123,25 +132,37 @@ alter table public.bot_settings enable row level security;
 create policy "bot_settings: owner select"
   on public.bot_settings for select
   using (
-    auth.uid() = (select user_id from public.repos where id = repo_id)
+    repo_id in (
+      select id from public.repos 
+      where user_id = (select auth.uid())
+    )
   );
 
 create policy "bot_settings: owner insert"
   on public.bot_settings for insert
   with check (
-    auth.uid() = (select user_id from public.repos where id = repo_id)
+    repo_id in (
+      select id from public.repos 
+      where user_id = (select auth.uid())
+    )
   );
 
 create policy "bot_settings: owner update"
   on public.bot_settings for update
   using (
-    auth.uid() = (select user_id from public.repos where id = repo_id)
+    repo_id in (
+      select id from public.repos 
+      where user_id = (select auth.uid())
+    )
   );
 
 create policy "bot_settings: owner delete"
   on public.bot_settings for delete
   using (
-    auth.uid() = (select user_id from public.repos where id = repo_id)
+    repo_id in (
+      select id from public.repos 
+      where user_id = (select auth.uid())
+    )
   );
 
 -------------------------------------------------------------------------------
