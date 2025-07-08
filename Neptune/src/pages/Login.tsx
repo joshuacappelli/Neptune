@@ -1,27 +1,26 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { checkExistingToken, loginWithGitHub } from "../oauth";
-import { Code, Github, GitBranch, Users, Loader2 } from "lucide-react";
+import { ensureSupabaseSession, checkExistingToken } from "../oauth";
+import { Github, Loader2, GitBranch, Code, Users } from "lucide-react";
 
 export default function Login() {
   const [booting, setBooting] = useState(true);
   const [logging, setLogging] = useState(false);
   const nav = useNavigate();
 
+  /* auto-login */
   useEffect(() => {
     (async () => {
-      const token = await checkExistingToken();
-      if (token) {
-        nav("/home");
-      }
+      const pat = await checkExistingToken();   // optional PAT validation
+      if (pat) nav("/home");
       setBooting(false);
     })();
   }, []);
 
-  const onClick = async () => {
+  const signIn = async () => {
     setLogging(true);
-    try   { await loginWithGitHub(); nav("/home"); }
-    catch { alert("Login failed, please retry."); }
+    try { await ensureSupabaseSession(); nav("/home"); }
+    catch { alert("Login failed. Try again."); }
     finally { setLogging(false); }
   };
 
@@ -104,7 +103,7 @@ export default function Login() {
             {/* Open Repository Button */}
             <button 
             className="group relative w-full overflow-hidden rounded-2xl" 
-            onClick={onClick}
+            onClick={signIn}
             disabled={logging} >
                 <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-blue-800  rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
                 <div className="relative flex items-center justify-center space-x-3 bg-gradient-to-r from-green-400/90 to-green-900/90 backdrop-blur-xl border border-white/20 text-white px-8 py-5 rounded-2xl font-semibold transition-all duration-300  group-hover:shadow-2xl group:hover group-hover:shadow-blue-500/25">
