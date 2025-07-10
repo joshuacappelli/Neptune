@@ -38,7 +38,11 @@
     },
     "fs": {
       "requireLiteralLeadingDot": true
+    },
+    "deep-link": {
+      "desktop": {
+        "schemes": ["Neptune"]
+      }
     }
-    
   }
 }

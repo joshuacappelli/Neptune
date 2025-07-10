@@ -1,27 +1,134 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ensureSupabaseSession, checkExistingToken } from "../oauth";
+import { supabase } from "../lib/supabase";
 import { Github, Loader2, GitBranch, Code, Users } from "lucide-react";
+import { useNeptuneStore } from "../store";
+import { saveItem } from "tauri-plugin-keychain"
+
+// Import the createOrUpdateUser function
+async function createOrUpdateUser() {
+  try {
+    console.log("=== createOrUpdateUser started (Login component) ===");
+    
+    const { data: { session } } = await supabase.auth.getSession();
+    console.log("Session retrieved:", !!session);
+    console.log("Session user ID:", session?.user?.id);
+    console.log("Session user metadata:", session?.user?.user_metadata);
+    
+    if (session) {
+      // The GitHub data is directly in user_metadata, not nested under 'user'
+      const gh = session.user.user_metadata;
+      console.log("GitHub user data:", gh);
+      
+      const row = {
+        id: session.user.id,            // UUID → FK for RLS
+        author_name: gh.user_name || gh.preferred_username || gh.name, // GitHub username
+        email: gh.email,
+        avatar_url: gh.avatar_url,
+        plan: 'free',                   // Default plan
+        tokens_used: 0                  // Default token usage
+      };
+      
+      console.log("User row to upsert:", row);
+      console.log("Current user ID (for RLS):", session.user.id);
+
+      const { data, error } = await supabase.from("users").upsert(row, { onConflict: "id" });
+      
+      if (error) {
+        console.error("Failed to upsert user:", error);
+        console.error("Error details:", {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
+      } else {
+        console.log("User upserted successfully:", data);
+        
+        // Set user in the store
+        const store = useNeptuneStore.getState();
+        store.setUser({
+          id: 1, // Using a number as expected by the User interface
+          login: row.author_name || 'unknown',
+          avatarUrl: row.avatar_url || '',
+          name: row.author_name,
+          email: row.email
+        });
+        store.setHasToken(true);
+        console.log("User set in store successfully");
+      }
+    } else {
+      console.error("No session found");
+    }
+  } catch (error) {
+    console.error("Error in createOrUpdateUser:", error);
+    if (error instanceof Error) {
+      console.error("Error stack:", error.stack);
+    }
+  }
+}
 
 export default function Login() {
   const [booting, setBooting] = useState(true);
   const [logging, setLogging] = useState(false);
   const nav = useNavigate();
+  const { user, hasToken, setUser, setHasToken } = useNeptuneStore();
 
   /* auto-login */
   useEffect(() => {
     (async () => {
-      const pat = await checkExistingToken();   // optional PAT validation
+      // Check store first
+      if (user && hasToken) {
+        console.log("User found in store, navigating to home");
+        nav("/home");
+        return;
+      }
+      
+      // Check for existing Supabase session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        console.log("Existing Supabase session found, navigating to home");
+        // Ensure user exists in our database
+        await createOrUpdateUser();
+        nav("/home");
+        return;
+      }
+      
+      // Fallback to PAT check
+      const pat = await checkExistingToken();
+      console.log("checking pat")
+      console.log("pat: " + pat)
       if (pat) nav("/home");
       setBooting(false);
     })();
-  }, []);
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Auth state changed:", event, session);
+      if (session) {
+        console.log("Session established, navigating to home");
+        nav("/home");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [nav, user, hasToken]);
 
   const signIn = async () => {
     setLogging(true);
-    try { await ensureSupabaseSession(); nav("/home"); }
-    catch { alert("Login failed. Try again."); }
-    finally { setLogging(false); }
+    try { 
+      await ensureSupabaseSession(); 
+      console.log("navigating to home")
+      nav("/home"); 
+    }
+    catch (error) { 
+      console.error("Login failed:", error);
+      alert("Login failed. Try again."); 
+    }
+    finally { 
+      setLogging(false); 
+    }
   };
 
   if (booting) return (
@@ -100,6 +207,7 @@ export default function Login() {
 
           {/* Action Buttons - Stacked */}
           <div className="space-y-3 mb-8">
+
             {/* Open Repository Button */}
             <button 
             className="group relative w-full overflow-hidden rounded-2xl" 
@@ -119,6 +227,7 @@ export default function Login() {
                     </>
                   )}
                 </div>
+                
                 {/* Shimmer effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
                                 translate-x-[-100%] group-hover:translate-x-[100%] 

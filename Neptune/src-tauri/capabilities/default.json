@@ -139,6 +139,7 @@
       ]
     },
     "store:default",
-    "keychain:default"
+    "keychain:default",
+    "deep-link:default"
   ]
 }
